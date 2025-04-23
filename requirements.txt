@@ -1,0 +1,5 @@
+flask
+flask-cors
+pillow
+numpy
+tensorflow==2.12.0  # Adjust based on your local version
