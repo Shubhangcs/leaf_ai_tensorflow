@@ -1,24 +1,28 @@
+# Use a lightweight Python image
 FROM python:3.9-slim
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# Set work directory
 WORKDIR /app
 
-# Install required system packages
-RUN apt-get update && apt-get install -y --no-install-recommends \
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     build-essential \
-    python3-dev \
-    libjpeg-dev \
-    zlib1g-dev \
-    libgl1 \
+    libgl1-mesa-glx \
     && rm -rf /var/lib/apt/lists/*
 
-# Install pip requirements
+# Copy requirements and install
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy source code
+# Copy app code and model
 COPY . .
 
+# Expose port
 EXPOSE 5000
 
-CMD ["python", "main.py"]
-
+# Run the app
+CMD ["python", "app.py"]
